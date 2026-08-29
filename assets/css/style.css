@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+
+:root {
+    --color-primary: #F62440;
+    --color-light: #FFFAF3;
+    --color-dark: #222222;
+    --font-primary: 'Inter', sans-serif;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: 5rem;
+    font-family: var(--font-primary);
+    font-optical-sizing: auto;
+    font-weight: 700;
+    line-height: 1;
+}
+
+span {
+    display: inline-block;
+}
+
+.canvas {
+    display: grid;
+    place-items: center;
+    min-height: 100dvh;
+    color: var(--color-light);
+    background-color: var(--color-dark);
+
+    > * {
+        grid-area: 1 / 1;
+    }
+}
+
+.scene-1 {
+    --_border-width: 2px;
+    --_border-dashed-size: calc(var(--_border-width) * 3);
+    --_border-stroke-color: #8d8d8d91;
+    --_border-transparent-color: #0000;
+    --_border-gradient-color: var(--_border-stroke-color) 0 var(--_border-dashed-size), var(--_border-transparent-color) var(--_border-dashed-size) calc(var(--_border-dashed-size) * 2);
+    position: relative;
+    border-width: var(--_border-width);
+    border-style: solid;
+    border-image-width: var(--_border-width);
+    border-image-slice: 1;
+    border-image-outset: 0 100vmax;
+    border-image-source: repeating-linear-gradient(90deg, var(--_border-gradient-color));
+    
+    &::before {
+        --_border-gradient-direction: 0deg;
+        content: '';
+        position: absolute;
+        inset: calc(var(--_border-width) * -1) calc(0.02em - var(--_border-width));
+        pointer-events: none;
+        border: inherit;
+        border-image-outset: 100vmax 0;
+        border-image-source: repeating-linear-gradient(0deg, var(--_border-gradient-color));
+    }
+}
+
+.scene-2 {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(50%);
+}
+.scene-3 {
+    --_cursor-width: 0.18em;
+    --_cursor-opacity: 0;
+    --_cursor-left: 50%;
+    --_cursor-height: 100%;
+    --_cursor-animation-name: none;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: calc(50% - (var(--_cursor-height) / 2));
+        left: var(--_cursor-left);
+        transform: translateX(-50%);
+        background-color: var(--color-primary);
+        width: var(--_cursor-width);
+        height: var(--_cursor-height);
+        opacity: var(--_cursor-opacity);
+        animation: blink 1s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        animation-name: var(--_cursor-animation-name);
+    }
+}
+
+ @keyframes blink {
+    0%,100% {
+        scale: 1 1;
+    }
+
+    50% {
+        scale: 1 0;
+    }
+}
