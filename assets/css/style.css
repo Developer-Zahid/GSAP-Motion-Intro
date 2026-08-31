@@ -1,10 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap');
+
+@font-face {
+    font-family: Champ;
+    src: url(https://cdn.prod.website-files.com/696173cb00865d1b386e4af8/6963d2cdeaa0084ad1abd7f0_Champ-ExtraBold.woff)format("woff");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap
+}
 
 :root {
     --color-primary: #F62440;
     --color-light: #FFFAF3;
     --color-dark: #222222;
     --font-primary: 'Inter', sans-serif;
+    --font-primary: 'Champ', sans-serif;
+    --font-secondary: "DynaPuff", system-ui;
 }
 
 *{
@@ -72,7 +83,7 @@ span {
 .scene-2 {
     opacity: 0;
     visibility: hidden;
-    transform: translateX(50%);
+    transform: translate3d(50%, 0, 0);
 }
 .scene-3 {
     --_cursor-width: 0.18em;
@@ -92,7 +103,7 @@ span {
         width: var(--_cursor-width);
         height: var(--_cursor-height);
         opacity: var(--_cursor-opacity);
-        animation: blink 1s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+        animation: 1s cubic-bezier(0.16, 1, 0.3, 1) infinite;
         animation-name: var(--_cursor-animation-name);
     }
 }
@@ -104,5 +115,30 @@ span {
 
     50% {
         scale: 1 0;
+    }
+}
+
+.scene-4 {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0, 100%, 0);
+    font-family: var(--font-secondary);
+
+    .scene-4__spacer {
+        position: relative;
+        color: #0000;
+
+        .scene-4__letter {
+            --_background-opacity: 80%;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            aspect-ratio: 1 / 1.15;
+            border: 0.13em solid var(--color-primary);
+            background-color: hsl(from var(--color-primary) h s l / var(--_background-opacity));
+            border-radius: 100vmax;
+        }
     }
 }
