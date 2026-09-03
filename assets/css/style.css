@@ -1,19 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap');
+@font-face {
+    font-family: 'Champ';
+    font-style: normal;
+    font-weight: 700;
+    font-stretch: 100%;
+    font-display: swap;
+    src: url("../fonts/champ-700.woff2") format("woff2");
+}
 
 @font-face {
-    font-family: Champ;
-    src: url(https://cdn.prod.website-files.com/696173cb00865d1b386e4af8/6963d2cdeaa0084ad1abd7f0_Champ-ExtraBold.woff)format("woff");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap
+  font-family: 'DynaPuff';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("../fonts/dynaPuff-700.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
     --color-primary: #F62440;
     --color-light: #FFFAF3;
     --color-dark: #222222;
-    --font-primary: 'Inter', sans-serif;
     --font-primary: 'Champ', sans-serif;
     --font-secondary: "DynaPuff", system-ui;
 }
@@ -75,6 +82,8 @@ span {
     border-image-slice: 1;
     border-image-outset: 0 100vmax;
     border-image-source: repeating-linear-gradient(90deg, var(--_border-gradient-color));
+    font-size: 0.4em;
+    transform: translateX(-200px);
     
     &::before {
         --_border-gradient-direction: 0deg;
@@ -141,6 +150,7 @@ span {
 
         .scene-4__circle {
             --_inner-cut-size: 0;
+            --_background-color: var(--color-primary);
             --_background-opacity: 80%;
             position: absolute;
             bottom: 0;
@@ -149,7 +159,7 @@ span {
             width: 85%;
             aspect-ratio: 1 / 1.15;
             border: 0.13em solid var(--color-primary);
-            background-color: hsl(from var(--color-primary) h s l / var(--_background-opacity));
+            background-color: hsl(from var(--_background-color) h s l / var(--_background-opacity));
             border-radius: 100vmax;
             clip-path: border-box;
 
