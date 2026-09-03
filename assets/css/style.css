@@ -18,13 +18,19 @@
     --font-secondary: "DynaPuff", system-ui;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 *{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     text-box-trim: trim-both;
     text-box-edge: cap alphabetic;
 }
+
 
 html {
     font-size: 16px;
@@ -36,6 +42,7 @@ body {
     font-optical-sizing: auto;
     font-weight: 700;
     line-height: 1;
+    overflow: hidden;
 }
 
 span {
@@ -43,6 +50,7 @@ span {
 }
 
 .canvas {
+    overflow: hidden;
     display: grid;
     place-items: center;
     min-height: 100dvh;
@@ -126,9 +134,13 @@ span {
 
     .scene-4__spacer {
         position: relative;
-        color: #0000;
-
+        
         .scene-4__letter {
+            visibility: hidden;
+        }
+
+        .scene-4__circle {
+            --_inner-cut-size: 0;
             --_background-opacity: 80%;
             position: absolute;
             bottom: 0;
@@ -139,6 +151,57 @@ span {
             border: 0.13em solid var(--color-primary);
             background-color: hsl(from var(--color-primary) h s l / var(--_background-opacity));
             border-radius: 100vmax;
+            clip-path: border-box;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 78%;
+                right: -8%;
+                background-color: var(--color-light);
+                width: 0.16em;
+                aspect-ratio: 1 / 1;
+                box-sizing: border-box;
+                border-radius: 50%;
+                scale: var(--_inner-cut-size);
+                transform-origin: right top;
+            }
         }
     }
+}
+
+.canvas__shutter {
+    --_curve-height: 35%;
+    position: absolute;
+    inset: 0;
+    scale: 4;
+    opacity: 0;
+    visibility: hidden;
+
+    &::before,
+    &::after
+    {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 50.5%;
+        background-color: var(--color-dark);
+    }
+
+    &::before {
+        top: 0;
+        clip-path: shape(from 0% 0%, vline to 100%, hline to 20%, curve to 75% 100% with 50% 0%, hline to 100%, vline to 0%, close);
+    }
+    &::after {
+        bottom: 0;
+        clip-path: shape(from 0% 100%, vline to 0%, hline to 20%, curve to 75% 0% with 50% var(--_curve-height), hline to 100%, vline to 100%, close);
+    }
+}
+
+.scene-5 {
+    position: relative;
+    color: var(--color-light);
+    opacity: 0;
+    visibility: hidden;
 }
