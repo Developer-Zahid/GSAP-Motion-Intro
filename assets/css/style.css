@@ -216,4 +216,67 @@ span {
     color: var(--color-light);
     opacity: 0;
     visibility: hidden;
+
+    .scene-5__words {
+        color: var(--color-primary);
+    }
+}
+
+.settings-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    padding-right: 2px;
+    aspect-ratio: 1 / 1;
+    border: none;
+    border-bottom-right-radius: 4px;
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.settings-dialog {
+    inset: 0;
+    margin: auto;
+    padding: 2rem;
+    font-size: 1rem;
+
+    .settings-dialog__title {
+        font-size: 2em;
+    }
+
+    .settings-dialog__form {
+        margin-top: 2rem;
+        display: grid;
+        gap: 0.7em;
+
+        input {
+            display: block;
+            width: 100%;
+        }
+
+        input[type="color"] {
+            cursor: pointer;
+        }
+
+        input[type="text"] {
+            padding: 0.5em;
+            font-size: 1em;
+        }
+    }
+
+    .settings-dialog__button {
+        margin-top: 0.5rem;
+        padding: 1em;
+        font-size: 1em;
+        cursor: pointer;
+        font-family: var(--font-primary);
+        color: var(--color-light);
+        background-color: var(--color-dark);
+        border: none;
+    }
 }
