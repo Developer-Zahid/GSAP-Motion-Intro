@@ -8,11 +8,11 @@ const intro = scene("intro")
     .fromTo(".scene-1",
         {
             fontSize: "0.4em",
-            x: -200,
+            x: "-12.5rem",
         },
         {
             fontSize: "0.65em",
-            x: -60,
+            x: "-3.75rem",
             ease: "expo.inOut",
         }
     )

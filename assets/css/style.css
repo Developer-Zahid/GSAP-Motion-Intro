@@ -40,7 +40,7 @@
 
 
 html {
-    font-size: 16px;
+    font-size: clamp(0.625rem, 0.493rem + 0.5634vw, 1rem);
 }
 
 body {
@@ -56,12 +56,14 @@ span {
 }
 
 .canvas {
+    overflow: hidden;
     position: relative;
     display: grid;
     place-items: center;
     min-height: 100dvh;
     color: var(--color-light);
     background-color: var(--color-dark);
+    text-align: center;
 
     > * {
         grid-area: 1 / 1;
@@ -181,6 +183,7 @@ span {
 
 .canvas__shutter {
     --_curve-height: 35%;
+    --_curve-offset: clamp(3rem, -10rem + 34vw, 24rem);
     position: absolute;
     inset: 0;
     scale: 4;
@@ -200,11 +203,11 @@ span {
 
     &::before {
         top: 0;
-        clip-path: shape(from 0% 0%, vline to 100%, hline to 20%, curve to 75% 100% with 50% 0%, hline to 100%, vline to 0%, close);
+        clip-path: shape(from 0% 0%, vline to 100%, hline to var(--_curve-offset), curve to calc(100% - var(--_curve-offset)) 100% with 50% 0%, hline to 100%, vline to 0%, close);
     }
     &::after {
         bottom: 0;
-        clip-path: shape(from 0% 100%, vline to 0%, hline to 20%, curve to 75% 0% with 50% var(--_curve-height), hline to 100%, vline to 100%, close);
+        clip-path: shape(from 0% 100%, vline to 0%, hline to var(--_curve-offset), curve to calc(100% - var(--_curve-offset)) 0% with 50% var(--_curve-height), hline to 100%, vline to 100%, close);
     }
 }
 
