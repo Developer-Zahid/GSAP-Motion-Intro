@@ -49,7 +49,6 @@ body {
     font-optical-sizing: auto;
     font-weight: 700;
     line-height: 1;
-    overflow: hidden;
 }
 
 span {
@@ -57,7 +56,7 @@ span {
 }
 
 .canvas {
-    overflow: hidden;
+    position: relative;
     display: grid;
     place-items: center;
     min-height: 100dvh;

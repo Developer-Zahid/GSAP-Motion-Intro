@@ -1,0 +1,16 @@
+/* Scroll-driven variant. Loaded after style.css, which it leaves untouched. */
+
+body {
+    /* Only visible once the pin releases at the very end, so match the closing frame. */
+    background-color: var(--color-light);
+}
+
+.scroll-stage {
+    --_scroll-length: 800vh;
+    height: var(--_scroll-length);
+}
+
+.scroll-pin {
+    height: 100dvh;
+    overflow: hidden;
+}

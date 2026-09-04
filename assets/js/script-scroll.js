@@ -1,5 +1,7 @@
-gsap.registerPlugin(GSDevTools, TextPlugin);
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
+/* Nested timelines do NOT inherit a parent's `defaults`, so each scene gets its own copy.
+   ScrollTrigger lives ONLY on the master timeline below — never on a nested child. */
 const DEFAULTS = { duration: 1, ease: "expo.out" };
 const scene = (id) => gsap.timeline({ id, defaults: DEFAULTS });
 
@@ -34,7 +36,7 @@ const intro = scene("intro")
 const cursor = scene("cursor")
     .to(".scene-1", {
         autoAlpha: 0,
-        x: -10,
+        x: -60,
         duration: 0.1,
         ease: "power1.out",
     })
@@ -206,8 +208,19 @@ const outro = scene("outro")
         text: "Zahid.",
     }, "<");
 
-/* ---------- master: assemble the scenes ---------- */
-const tl = gsap.timeline({ id: "master" })
+/* ---------- master: scrubbed by scroll ---------- */
+const tl = gsap.timeline({
+    id: "master",
+    scrollTrigger: {
+        trigger: ".scroll-stage",
+        start: "top top",
+        end: "bottom bottom",
+        pin: ".scroll-pin",
+        scrub: 1,
+        invalidateOnRefresh: true,
+        markers: false,
+    },
+})
 .addLabel("intro").add(intro)
 .addLabel("cursor").add(cursor)
 .addLabel("name").add(developerName)
@@ -216,5 +229,3 @@ const tl = gsap.timeline({ id: "master" })
 .addLabel("shutter").add(shutter)
 .addLabel("roles").add(roles)
 .addLabel("outro", "+=0.5").add(outro, "outro");
-
-GSDevTools.create();
