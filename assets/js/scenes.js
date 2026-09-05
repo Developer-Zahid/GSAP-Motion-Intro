@@ -9,6 +9,18 @@
  * gsap.registerPlugin(...) first — a module's top-level code would run too early.
  */
 
+/**
+ * Single source of truth for the copy. settings.js seeds the form inputs from this and
+ * buildIntro() falls back to it, so the defaults can't drift between markup and code.
+ * `roles` is a comma-separated string because that is what the form field produces.
+ */
+export const DEFAULT_SETTINGS = {
+    fullName: "Zahid Hasan Munna",
+    brandName: "Developer Zahid",
+    roles: "Designer, Developer, Partner",
+    themeColor: "#F62440",
+};
+
 /* Nested timelines do NOT inherit a parent's `defaults`, so each scene gets its own copy. */
 const DEFAULTS = { duration: 1, ease: "expo.out" };
 const scene = (id) => gsap.timeline({ id, defaults: DEFAULTS });
@@ -21,7 +33,41 @@ const scene = (id) => gsap.timeline({ id, defaults: DEFAULTS });
  * @returns {{ master: object, scenes: object }} The master timeline plus each named
  *   scene, so callers can drive them individually (`scenes.roles.play()`).
  */
-export function buildIntro(masterVars = {}) {
+export function buildIntro(options = {}) {
+    const {
+        fullName = DEFAULT_SETTINGS.fullName,
+        brandName = DEFAULT_SETTINGS.brandName,
+        roles = DEFAULT_SETTINGS.roles,
+        /* Applied by the caller as a CSS variable, not a tween — pulled out here so it
+           doesn't fall through into masterVars. Anything that isn't a real GSAP
+           timeline var must be destructured out, or the rest-spread leaks it. */
+        themeColor,
+        ...masterVars
+    } = options;
+
+    /* TextPlugin assigns through innerHTML, so any copy reaching a `text:` value is a
+       markup-injection sink — verified: `text: '<img src=x onerror=…>'` runs the
+       handler. These strings can arrive from a shared URL, i.e. from whoever sent the
+       link, so escape here at the sink rather than trusting each caller. Escaping also
+       renders correctly: "Tom & Jerry" types as "Tom & Jerry". */
+    const escapeText = (value) =>
+        String(value).replace(
+            /[&<>"']/g,
+            (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]
+        );
+
+    /* Accepts either an array or the comma-separated string the settings form produces. */
+    const toRoleList = (value) =>
+        (Array.isArray(value) ? value : String(value ?? "").split(","))
+            .map((role) => String(role).trim())
+            .filter(Boolean);
+
+    const rolesList = toRoleList(roles);
+    const formattedRoles = (rolesList.length ? rolesList : toRoleList(DEFAULT_SETTINGS.roles))
+        .map(escapeText);
+
+    const safeFullName = escapeText(fullName);
+    const safeBrandName = escapeText(brandName);
 
     /* ---------- "H" grows in, canvas flips to light, types out "Hi" ---------- */
     const intro = scene("intro")
@@ -96,7 +142,7 @@ export function buildIntro(masterVars = {}) {
             width: 0,
         }, "<")
         .to(".scene-3", {
-            text: "Zahid Hasan Munna",
+            text: safeFullName,
             ease: "none",
         }, "<");
 
@@ -169,7 +215,7 @@ export function buildIntro(masterVars = {}) {
         }, "<+0.2");
 
     /* ---------- "Creative ___" cycles through the roles ---------- */
-    const roles = scene("roles")
+    const rolesTimeline = scene("roles")
         .to(".scene-5", {
             autoAlpha: 1,
         })
@@ -201,11 +247,11 @@ export function buildIntro(masterVars = {}) {
             {
                 x: 0,
                 ease: "none",
-                keyframes: [
-                    { text: "Designer.", duration: 0.5 },
-                    { text: "Developer.", delay: 0.5, duration: 0 },
-                    { text: "Partner.", delay: 0.5, duration: 0 },
-                ],
+                keyframes: formattedRoles.map((r, i) => ({
+                    text: r.endsWith(".") ? r : `${r}.`,
+                    delay: i === 0 ? 0 : 0.5,
+                    duration: i === 0 ? 0.5 : 0,
+                })),
             },
             "<+0.5"
         )
@@ -220,10 +266,14 @@ export function buildIntro(masterVars = {}) {
             fontSize: "0.5em",
         })
         .set(".scene-5__prefix", {
-            text: "Developer Zahid",
+            text: safeBrandName,
         }, "<+0.1")
         .set(".scene-5__words", {
             text: ".",
+            /* The markup keeps a real space between prefix and words (needed so the
+               roles line reads "Creative Designer." for screen readers and copy).
+               The sign-off wants no gap, so pull the period back over it. */
+            marginInlineStart: "-0.2em",
         }, "<");
 
     /* ---------- master: the only part that differs between builds ---------- */
@@ -234,11 +284,11 @@ export function buildIntro(masterVars = {}) {
         .addLabel("your", "+=0.5").add(your, "your")
         .addLabel("morph").add(morph)
         .addLabel("shutter").add(shutter)
-        .addLabel("roles").add(roles)
+        .addLabel("roles").add(rolesTimeline)
         .addLabel("outro", "+=0.5").add(outro, "outro");
 
     return {
         master,
-        scenes: { intro, cursor, name: developerName, your, morph, shutter, roles, outro },
+        scenes: { intro, cursor, name: developerName, your, morph, shutter, roles: rolesTimeline, outro },
     };
 }

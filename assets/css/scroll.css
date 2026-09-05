@@ -3,11 +3,24 @@ body {
 }
 
 .scroll-stage {
-    --_scroll-length: 800vh;
+    --_scroll-length: 800dvh;
     height: var(--_scroll-length);
 }
 
 .scroll-pin {
     height: 100dvh;
     overflow: hidden;
+}
+
+.indicator {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
+    color: var(--color-dark);
+    text-align: center;
+    pointer-events: none;
+    filter: drop-shadow(0 0 1px var(--color-light));
 }

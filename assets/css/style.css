@@ -36,6 +36,7 @@
     padding: 0;
     text-box-trim: trim-both;
     text-box-edge: cap alphabetic;
+    outline-offset: 4px;
 }
 
 
@@ -49,6 +50,10 @@ body {
     font-optical-sizing: auto;
     font-weight: 700;
     line-height: 1;
+}
+
+input, button {
+    font: inherit;
 }
 
 span {
@@ -223,7 +228,8 @@ span {
 }
 
 .settings-button {
-    position: absolute;
+    position: fixed;
+    z-index: 10;
     top: 0;
     left: 0;
     display: grid;
@@ -244,6 +250,11 @@ span {
     margin: auto;
     padding: 2rem;
     font-size: 1rem;
+    width: min(80%, 50ch);
+
+    &::backdrop {
+        background-color: hsl(from var(--color-dark) h s l / 70%);
+    }
 
     .settings-dialog__title {
         font-size: 2em;
@@ -254,9 +265,13 @@ span {
         display: grid;
         gap: 0.7em;
 
+        label {
+            font-size: 0.8em;
+        }
+
         input {
-            display: block;
             width: 100%;
+            text-box: initial;
         }
 
         input[type="color"] {
@@ -265,18 +280,35 @@ span {
 
         input[type="text"] {
             padding: 0.5em;
-            font-size: 1em;
         }
     }
 
     .settings-dialog__button {
-        margin-top: 0.5rem;
         padding: 1em;
         font-size: 1em;
         cursor: pointer;
-        font-family: var(--font-primary);
         color: var(--color-light);
         background-color: var(--color-dark);
         border: none;
+    }
+
+    .cc-secondary {
+        font-size: 0.8em;
+        color: var(--color-dark);
+        background-color: transparent;
+        border: 1px solid var(--color-dark);
+    }
+
+    .settings-dialog__status {
+        font-size: 0.75em;
+        color: var(--color-dark);
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    .settings-dialog__share-url {
+        user-select: all;
     }
 }
