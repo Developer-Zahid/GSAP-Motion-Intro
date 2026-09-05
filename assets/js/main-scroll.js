@@ -4,32 +4,23 @@ import { initSettings } from "./settings.js";
 /* Register before building — the scenes use TextPlugin at creation time. */
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
+/* How many extra viewports of scrolling the pinned intro lasts — the scroll length
+   knob. It lives here rather than in CSS because .scroll-stage must NOT have its own
+   height: the pin-spacer already provides the runway, and a CSS height would be a
+   second, competing one. The two agree at load and drift apart the moment the mobile
+   URL bar changes `dvh`, leaving dead scroll at the bottom. */
+const SCROLL_SCREENS = 7;
+
 /* ScrollTrigger lives ONLY on the master timeline — never on a nested scene. */
-const SCROLL_TRIGGER = {
-    trigger: ".scroll-stage",
-    start: "top top",
-    end: "bottom bottom",
-    pin: ".scroll-pin",
-    scrub: 1,
-    invalidateOnRefresh: true,
-    markers: false,
-};
-
-const build = (settings) => buildIntro({ ...settings, scrollTrigger: SCROLL_TRIGGER });
-
-let motion;
-
-const settings = initSettings((updated) => {
-    /* Kill the ScrollTrigger explicitly with revert=true so the pin-spacer it injected
-       is removed. Leaving it would stack a second spacer on the next build and the
-       page would grow by a viewport each save. */
-    motion.master.scrollTrigger?.kill(true);
-    motion.master.revert();
-
-    motion = build(updated);
-
-    /* Recalculate start/end against the layout the rebuild produced. */
-    ScrollTrigger.refresh();
+buildIntro({
+    ...initSettings(),
+    scrollTrigger: {
+        trigger: ".scroll-stage",
+        start: "top top",
+        end: () => `+=${window.innerHeight * SCROLL_SCREENS}`,
+        pin: ".scroll-pin",
+        scrub: 1,
+        invalidateOnRefresh: true,
+        markers: false,
+    },
 });
-
-motion = build(settings);

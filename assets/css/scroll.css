@@ -2,11 +2,6 @@ body {
     background-color: var(--color-light);
 }
 
-.scroll-stage {
-    --_scroll-length: 800dvh;
-    height: var(--_scroll-length);
-}
-
 .scroll-pin {
     height: 100dvh;
     overflow: hidden;

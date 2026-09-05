@@ -75,6 +75,118 @@ span {
     }
 }
 
+/* Settings Dialog */
+.settings-button {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    padding-right: 2px;
+    aspect-ratio: 1 / 1;
+    border: none;
+    border-bottom-right-radius: 4px;
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.settings-dialog {
+    inset: 0;
+    margin: auto;
+    padding: 2rem;
+    font-size: 1rem;
+    width: min(80%, 50ch);
+
+    &::backdrop {
+        background-color: hsl(from var(--color-dark) h s l / 70%);
+    }
+}
+
+.settings-dialog__title {
+    font-size: 2em;
+}
+
+.settings-dialog__menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.settings-dialog__menu__link {
+    padding: 1em;
+    text-decoration: none;
+    text-align: center;
+    background-color: var(--color-dark);
+    color: var(--color-light);
+    align-content: center;
+    font-size: 0.9em;
+    letter-spacing: 0.05em;
+}
+
+.settings-dialog__form {
+    display: grid;
+    gap: 0.7em;
+
+    label {
+        font-size: 0.8em;
+    }
+
+    input {
+        width: 100%;
+        text-box: initial;
+    }
+
+    input[type="color"] {
+        cursor: pointer;
+    }
+
+    input[type="text"] {
+        padding: 0.5em;
+    }
+}
+
+.settings-dialog__button {
+    padding: 1em;
+    font-size: 1em;
+    cursor: pointer;
+    color: var(--color-light);
+    background-color: var(--color-dark);
+    border: none;
+
+    &.cc-secondary {
+        font-size: 0.8em;
+        color: var(--color-dark);
+        background-color: transparent;
+        border: 1px solid var(--color-dark);
+    }
+}
+
+
+.settings-dialog__status {
+    font-size: 0.75em;
+    color: var(--color-dark);
+
+    &:empty {
+        display: none;
+    }
+}
+
+.settings-dialog__share-url {
+    user-select: all;
+}
+
+:is(.settings-dialog__menu__link, .settings-dialog__button):active {
+    scale: 0.95;
+}
+
+
+/* Animations */
 .scene-1 {
     --_border-width: 2px;
     --_border-dashed-size: calc(var(--_border-width) * 3);
@@ -108,6 +220,7 @@ span {
     visibility: hidden;
     transform: translate3d(50%, 0, 0);
 }
+
 .scene-3 {
     --_cursor-width: 0.18em;
     --_cursor-opacity: 0;
@@ -224,91 +337,5 @@ span {
 
     .scene-5__words {
         color: var(--color-primary);
-    }
-}
-
-.settings-button {
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    display: grid;
-    place-items: center;
-    width: 2.5rem;
-    padding-right: 2px;
-    aspect-ratio: 1 / 1;
-    border: none;
-    border-bottom-right-radius: 4px;
-    background-color: var(--color-dark);
-    color: var(--color-light);
-    cursor: pointer;
-    font-size: 1.2rem;
-}
-
-.settings-dialog {
-    inset: 0;
-    margin: auto;
-    padding: 2rem;
-    font-size: 1rem;
-    width: min(80%, 50ch);
-
-    &::backdrop {
-        background-color: hsl(from var(--color-dark) h s l / 70%);
-    }
-
-    .settings-dialog__title {
-        font-size: 2em;
-    }
-
-    .settings-dialog__form {
-        margin-top: 2rem;
-        display: grid;
-        gap: 0.7em;
-
-        label {
-            font-size: 0.8em;
-        }
-
-        input {
-            width: 100%;
-            text-box: initial;
-        }
-
-        input[type="color"] {
-            cursor: pointer;
-        }
-
-        input[type="text"] {
-            padding: 0.5em;
-        }
-    }
-
-    .settings-dialog__button {
-        padding: 1em;
-        font-size: 1em;
-        cursor: pointer;
-        color: var(--color-light);
-        background-color: var(--color-dark);
-        border: none;
-    }
-
-    .cc-secondary {
-        font-size: 0.8em;
-        color: var(--color-dark);
-        background-color: transparent;
-        border: 1px solid var(--color-dark);
-    }
-
-    .settings-dialog__status {
-        font-size: 0.75em;
-        color: var(--color-dark);
-
-        &:empty {
-            display: none;
-        }
-    }
-
-    .settings-dialog__share-url {
-        user-select: all;
     }
 }

@@ -4,9 +4,8 @@ import { DEFAULT_SETTINGS } from "./scenes.js";
  * The "Project Settings" dialog, shared by the autoplay and scroll builds.
  *
  * The markup is injected rather than written into each page, so the two HTML files
- * can't drift apart and the field list lives in exactly one place. Everything that
- * differs between the pages — how the timeline is torn down and rebuilt — is passed
- * in as the `onApply` callback.
+ * can't drift apart and the field list lives in exactly one place. Saving persists to
+ * localStorage and reloads, so both pages just read the settings and build once.
  *
  * Settings resolve in this order, least to most specific:
  *   built-in defaults  →  what this browser saved  →  what the URL asks for
@@ -133,6 +132,10 @@ function renderUI() {
         `<button id="${DIALOG_ID}-button" type="button" class="settings-button" aria-label="Project settings" command="show-modal" commandfor="${DIALOG_ID}">${GEAR_ICON}</button>
          <dialog id="${DIALOG_ID}" class="settings-dialog" aria-labelledby="${DIALOG_ID}-title" closedby="any">
              <h2 id="${DIALOG_ID}-title" class="settings-dialog__title">Project Settings</h2>
+             <nav class="settings-dialog__menu">
+                <a href="./" class="settings-dialog__menu__link">Timeline Version</a>
+                <a href="./scroll.html" class="settings-dialog__menu__link">Scroll Trigger Version</a>
+             </nav>
              <form class="settings-dialog__form">
                  ${fields}
                  <button type="submit" class="settings-dialog__button">Save</button>
@@ -168,11 +171,12 @@ function applyThemeColor({ themeColor }) {
 /**
  * Inject the dialog, restore saved/shared settings, and wire Save and Share.
  *
- * @param {(settings: object) => void} onApply Rebuild step for this page. Runs after the
- *   theme is applied and before the dialog closes.
- * @returns {object} The settings to build with on first load.
+ * Save persists to localStorage and reloads, so callers only need the returned settings
+ * for their first (and only) build — there is no rebuild path to hook into.
+ *
+ * @returns {object} The settings to build with.
  */
-export function initSettings(onApply) {
+export function initSettings() {
     renderUI();
 
     const dialog = document.getElementById(DIALOG_ID);
@@ -202,13 +206,15 @@ export function initSettings(onApply) {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const settings = { ...DEFAULT_SETTINGS, ...readForm(form) };
-        writeStored(settings);
-        applyThemeColor(settings);
-        onApply(settings);
+        writeStored({ ...DEFAULT_SETTINGS, ...readForm(form) });
 
-        resetStatus();
-        dialog.close();
+        /* Reload instead of rebuilding in place. A fresh page measures its own layout
+           from scratch, which is exactly what the pinned ScrollTrigger build needs — no
+           teardown order to get right and nothing left sized for an old viewport.
+           location.pathname (not href) drops any ?name=… from a shared link, so the
+           settings just saved win over the ones that link asked for. replace() keeps it
+           out of history, so Back doesn't return to the pre-save state. */
+        location.replace(location.pathname);
     });
 
     form.querySelector("[data-share]").addEventListener("click", async () => {
