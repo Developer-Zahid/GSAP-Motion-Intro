@@ -92,12 +92,27 @@ function readParams() {
     return raw;
 }
 
+/**
+ * Merge the three sources, then persist if the URL carried anything.
+ *
+ * Opening a shared link is a deliberate handoff, so what it carries is adopted as this
+ * browser's saved settings straight away — no need to open the dialog and press Save to
+ * make it stick. Fields the link leaves out keep whatever was already saved.
+ */
 function resolveSettings() {
-    return {
+    const fromParams = sanitize(readParams());
+
+    const settings = {
         ...DEFAULT_SETTINGS,
         ...sanitize(readStored()),
-        ...sanitize(readParams()),
+        ...fromParams,
     };
+
+    if (Object.keys(fromParams).length > 0) {
+        writeStored(settings);
+    }
+
+    return settings;
 }
 
 /* Only non-default values go in, so a link with one tweak stays short and readable. */
