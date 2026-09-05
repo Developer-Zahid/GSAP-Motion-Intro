@@ -134,7 +134,7 @@ function renderUI() {
              <h2 id="${DIALOG_ID}-title" class="settings-dialog__title">Project Settings</h2>
              <nav class="settings-dialog__menu">
                 <a href="./" class="settings-dialog__menu__link">Timeline Version</a>
-                <a href="./scroll.html" class="settings-dialog__menu__link">Scroll Trigger Version</a>
+                <a href="./scroll" class="settings-dialog__menu__link">Scroll Trigger Version</a>
              </nav>
              <form class="settings-dialog__form">
                  ${fields}
